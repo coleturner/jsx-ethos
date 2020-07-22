@@ -1,0 +1,166 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Test</title>
+    <style media="screen" id="style">
+      html,
+      body {
+        font-family: Helvetica;
+      }
+
+      .something {
+        padding: 1em;
+      }
+
+      .else {
+        color: green;
+      }
+
+      .else span {
+        text-decoration: underline;
+      }
+    </style>
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+
+    <script type="text/javascript">
+      const jsxElements = {};
+    </script>
+    <script type="text/javascript" src="./scalpel.js"></script>
+  </head>
+
+  <body>
+    <div class="something" data-source-file="my-file.js" data-jsx-element="0">
+      <div class="else" data-source-file="my-file.js" data-jsx-element="1">
+        Hello React!
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      const parser = window.scalpel.createParser();
+      const generator = window.scalpel.createGenerator();
+      const parsedSelectors = {};
+
+      const observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeType !== Node.ELEMENT_NODE) {
+              return;
+            }
+
+            matchElement(node);
+            node.querySelectorAll('*').forEach(matchElement);
+          });
+        });
+      });
+
+      const config = {
+        attributes: true,
+        childList: true,
+        subtree: true,
+        characterData: true,
+      };
+
+      function getElementKey(element) {
+        return [
+          element.getAttribute('data-source-file'),
+          element.getAttribute('data-jsx-element'),
+        ].join(':');
+      }
+
+      function matchElement(element) {
+        if (
+          element.nodeType !== Node.ELEMENT_NODE ||
+          !element.getAttribute('data-source-file') ||
+          !element.getAttribute('data-jsx-element')
+        ) {
+          console.log('dont match', element);
+          return;
+        }
+
+        function mapSelector(selector) {
+          if (parsedSelectors.hasOwnProperty(selector)) {
+            return parsedSelectors[selector];
+          }
+
+          try {
+            const parsedSelector = parser.parse(selector);
+
+            const lastSelectorPart = parsedSelector[parsedSelector.length - 1];
+
+            if (lastSelectorPart?.body) {
+              lastSelectorPart.body = lastSelectorPart?.body.filter(
+                (n) =>
+                  !['pseudoClassSelector', 'pseudoElementSelector'].includes(
+                    n.type
+                  )
+              );
+            }
+
+            const generatedSelector = generator.generate(parsedSelector);
+            console.log('map selector', selector, generatedSelector);
+
+            parsedSelectors[selector] = generatedSelector;
+            return generatedSelector;
+          } catch {}
+
+          return selector;
+        }
+
+        console.log('match', element);
+
+        const elementKey = getElementKey(element);
+
+        jsxElements[elementKey] = jsxElements[elementKey] || {
+          markup: element.outerHTML,
+          styles: [],
+        };
+
+        for (let stylesheet of document.styleSheets) {
+          for (let rule of stylesheet.rules) {
+            const selector = mapSelector(rule.selectorText);
+
+            if (element.matches(selector)) {
+              rule.toJSON = () => rule.cssText;
+              jsxElements[elementKey].styles.push(rule);
+
+              try {
+                document.querySelector('#output').innerText = JSON.stringify(
+                  jsxElements,
+                  null,
+                  2
+                );
+              } catch {}
+            }
+          }
+        }
+      }
+
+      function watchElement(element) {
+        if (element.nodeType !== Node.ELEMENT_NODE) {
+          return;
+        }
+
+        observer.observe(element, config);
+      }
+
+      document.querySelectorAll('[data-jsx-element]').forEach((element) => {
+        matchElement(element);
+      });
+
+      document.querySelectorAll('*').forEach(watchElement);
+
+      setTimeout(() => {
+        const newElement = document.createElement('b');
+        newElement.setAttribute('data-source-file', 'test.html');
+        newElement.setAttribute('data-jsx-element', '0');
+        newElement.innerText = ' cool beans';
+
+        document.querySelector('.else').appendChild(newElement);
+      }, 2000);
+    </script>
+
+    <div id="output" style="white-space: pre;"></div>
+  </body>
+</html>

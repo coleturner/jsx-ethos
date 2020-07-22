@@ -1,0 +1,22 @@
+body {
+  font-weight: bold;
+}
+
+body span:hover {
+  font-style: itatlic;
+}
+
+body b {
+  color: blue;
+}
+
+body b:hover {
+  color: blue;
+}
+
+body b::before {
+  content: '';
+}
+body b:hover::before {
+  content: '';
+}
