@@ -80,7 +80,7 @@ In order to express all of the markup (for the runtime process to match all the 
 
 ### Runtime Process
 
-Checkout runtime.html for a demo on how to match styles to a DOM node. The process works as follows:
+Checkout [runtime.html](/runtime.html) for a demo on how to match styles to a DOM node. The process works as follows:
 
 1. A Mutation Observer watches the DOM tree
 2. As nodes are added, they are observed against all of the CSS rules on the page.
