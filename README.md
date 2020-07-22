@@ -149,16 +149,16 @@ body b:hover::before {
 
 ```json
 {
-  "my-file.js:0": {
-    "markup": "<div class=\"something\" data-source-file=\"my-file.js\" data-jsx-element=\"0\">\n      <div class=\"else\" data-source-file=\"my-file.js\" data-jsx-element=\"1\">\n        Hello React!\n      </div>\n    </div>",
+  "path/to/index.js:0": {
+    "markup": "<div class=\"something\" data-source-file=\"path/to/index.js\" data-jsx-element=\"0\">\n      <div class=\"else\" data-source-file=\"path/to/index.js\" data-jsx-element=\"1\">\n        Hello React!\n      </div>\n    </div>",
     "styles": [".something { padding: 1em; }"]
   },
-  "my-file.js:1": {
-    "markup": "<div class=\"else\" data-source-file=\"my-file.js\" data-jsx-element=\"1\">\n        Hello React!\n      </div>",
+  "path/to/index.js:1": {
+    "markup": "<div class=\"else\" data-source-file=\"path/to/index.js\" data-jsx-element=\"1\">\n        Hello React!\n      </div>",
     "styles": [".else { color: green; }"]
   },
-  "test.html:0": {
-    "markup": "<b data-source-file=\"test.html\" data-jsx-element=\"0\"> cool beans</b>",
+  "path/to/coolBeans:0": {
+    "markup": "<b data-source-file=\"path/to/coolBeans.js\" data-jsx-element=\"0\"> cool beans</b>",
     "styles": [
       "body b { color: blue; }",
       "body b:hover { color: blue; }",
