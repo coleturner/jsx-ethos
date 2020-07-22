@@ -31,8 +31,16 @@
   </head>
 
   <body>
-    <div class="something" data-source-file="my-file.js" data-jsx-element="0">
-      <div class="else" data-source-file="my-file.js" data-jsx-element="1">
+    <div
+      class="something"
+      data-source-file="path/to/index.js"
+      data-jsx-element="0"
+    >
+      <div
+        class="else"
+        data-source-file="path/to/index.js"
+        data-jsx-element="1"
+      >
         Hello React!
       </div>
     </div>
@@ -151,9 +159,10 @@
 
       document.querySelectorAll('*').forEach(watchElement);
 
+      // Just an example of something that would render later in the app lifecycle
       setTimeout(() => {
         const newElement = document.createElement('b');
-        newElement.setAttribute('data-source-file', 'test.html');
+        newElement.setAttribute('data-source-file', 'path/to/index.js');
         newElement.setAttribute('data-jsx-element', '0');
         newElement.innerText = ' cool beans';
 
