@@ -1,20 +1,20 @@
 /**
  * Maps every JSX element to a numeric ID for the given file
  */
-
 const dataSourceFile = 'data-source-file';
 const dataJSXElement = 'data-jsx-element';
 
 export default function (babel) {
   const { types: t } = babel;
 
-  const sourceFileStr = 'my-file.js';
   let id = 0;
 
   return {
     name: 'ast-transform', // not required
     visitor: {
-      JSXOpeningElement(path) {
+      JSXOpeningElement(path, state) {
+        const sourceFileStr = state.file.opts.filename || 'unknown-file.js';
+
         let dataSourceFileAttr = path.node.attributes.find(
           (attr) => attr.name.name === dataSourceFile
         );
