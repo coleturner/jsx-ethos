@@ -135,7 +135,7 @@ body b::before {
 body b:hover::before {
   content: '';
 }
--->>
+-->
 
 <div class="something" data-source-file="path/to/index.js" data-jsx-element="0">
   <div class="else" data-source-file="path/to/index.js" data-jsx-element="1">
