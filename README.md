@@ -6,7 +6,7 @@ Codename for a series of scripts to codemod a JSX codebase to Emotion
 
 This is a proof of concept to discover whether it's possible to automate a codebase from JSX to Emotion CSS-in-JS. The goal of this concept is to map JSX elements to their styles when styles are not co-located. Then using that mapping to codegen styles
 
-In order to do this, we would need to:
+**In order to do this, we would need to:**
 
 1. Unique identify JSX elements (`<div />` or `<MyComponent />`) to their DOM nodes
 2. During the browser runtime, collect all of the styles that match to a DOM node
@@ -15,7 +15,7 @@ In order to do this, we would need to:
 
 ## 1: JSX Identification
 
-./babel-jsx-source-id.js is a Babel transform that adds two JSX attributes to every single JSX element:
+[./babel-jsx-source-id.js](./babel-jsx-source-id.js) is a Babel transform that adds two JSX attributes to every single JSX element:
 
 - data-source-file: the name of the file
 - data-jsx-element: a unique ID for the JSX element within that file.
